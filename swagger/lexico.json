@@ -1,0 +1,194 @@
+{
+    "swagger": "2.0",
+    "info": {
+      "version": "1.0.0",
+      "title": "Lexico Service",
+      "description": "API for managing words in the lexico service"
+    },
+    "basePath": "/lexico/v1",
+    "schemes": ["http"],
+    "consumes": ["application/json"],
+    "produces": ["application/json"],
+    "paths": {
+      "/words": {
+        "get": {
+          "summary": "List all words",
+          "description": "Retrieve a paginated list of all words",
+          "parameters": [
+            {
+              "name": "page",
+              "in": "query",
+              "required": false,
+              "type": "integer",
+              "default": 1,
+              "description": "Page number of the word list"
+            },
+            {
+              "name": "pageSize",
+              "in": "query",
+              "required": false,
+              "type": "integer",
+              "default": 10,
+              "description": "Number of words per page"
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "A paginated list of words",
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "currentPage": {
+                    "type": "integer"
+                  },
+                  "pageSize": {
+                    "type": "integer"
+                  },
+                  "totalPages": {
+                    "type": "integer"
+                  },
+                  "totalWords": {
+                    "type": "integer"
+                  },
+                  "words": {
+                    "type": "array",
+                    "items": {
+                      "$ref": "#/definitions/Word"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "post": {
+          "summary": "Create a new word",
+          "description": "Add a new word to the lexico",
+          "parameters": [
+            {
+              "in": "body",
+              "name": "word",
+              "description": "Word to add",
+              "required": true,
+              "schema": {
+                "$ref": "#/definitions/Word"
+              }
+            }
+          ],
+          "responses": {
+            "201": {
+              "description": "Word created"
+            },
+            "400": {
+              "description": "Invalid input"
+            }
+          }
+        }
+      },
+      "/words/{wordID}": {
+        "get": {
+          "summary": "Get a word by ID",
+          "description": "Retrieve a word by its unique ID",
+          "parameters": [
+            {
+              "in": "path",
+              "name": "wordID",
+              "type": "string",
+              "required": true,
+              "description": "Unique ID of the word"
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "Details of the word",
+              "schema": {
+                "$ref": "#/definitions/Word"
+              }
+            },
+            "404": {
+              "description": "Word not found"
+            }
+          }
+        },
+        "patch": {
+          "summary": "Update a word by ID",
+          "description": "Update the details of a word by its unique ID",
+          "parameters": [
+            {
+              "in": "path",
+              "name": "wordID",
+              "type": "string",
+              "required": true,
+              "description": "Unique ID of the word to update"
+            },
+            {
+              "in": "body",
+              "name": "wordUpdate",
+              "description": "Word attributes to update",
+              "required": true,
+              "schema": {
+                "properties": {
+                  "word": {
+                    "type": "string",
+                    "description": "Updated name of the word"
+                  },
+                  "audio": {
+                    "type": "string",
+                    "description": "Updated URL to the audio pronunciation of the word"
+                  },
+                  "synonyms": {
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    },
+                    "description": "Updated list of synonyms"
+                  }
+                }
+              }
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "Word updated"
+            },
+            "400": {
+              "description": "Invalid input"
+            },
+            "404": {
+              "description": "Word not found"
+            }
+          }
+        }
+      }
+    },
+    "definitions": {
+      "Word": {
+        "type": "object",
+        "required": ["word"],
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "Unique identifier for the word",
+            "readOnly": true
+          },
+          "word": {
+            "type": "string",
+            "description": "Name of the word",
+            "maxLength": 100
+          },
+          "audio": {
+            "type": "string",
+            "description": "URL to the audio pronunciation of the word"
+          },
+          "synonyms": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "List of synonyms for the word"
+          }
+        }
+      }
+    }
+  }
+  

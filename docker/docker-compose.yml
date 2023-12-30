@@ -1,0 +1,10 @@
+version: '3'
+services:
+  practice:
+    build: ./server/practice/docker
+    ports:
+      - "80:80"
+  lexico:
+    build: ./server/lexico/docker
+    ports:
+      - "81:80"

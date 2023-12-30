@@ -1,0 +1,151 @@
+---
+swagger: "2.0"
+info:
+  description: "API for managing words in the lexico service"
+  version: "1.0.0"
+  title: "Lexico Service"
+basePath: "/lexico/v1"
+schemes:
+- "http"
+consumes:
+- "application/json"
+produces:
+- "application/json"
+paths:
+  /words:
+    get:
+      tags:
+      - "default_controller"
+      summary: "List all words"
+      description: "Retrieve a paginated list of all words"
+      operationId: "controllers.default_controller.words_get"
+      parameters:
+      - name: "page"
+        in: "query"
+        description: "Page number of the word list"
+        required: false
+        type: "integer"
+        default: 1
+      - name: "pageSize"
+        in: "query"
+        description: "Number of words per page"
+        required: false
+        type: "integer"
+        default: 10
+      responses:
+        200:
+          description: "A paginated list of words"
+          schema:
+            $ref: "#/definitions/inline_response_200"
+    post:
+      tags:
+      - "default_controller"
+      summary: "Create a new word"
+      description: "Add a new word to the lexico"
+      operationId: "controllers.default_controller.words_post"
+      parameters:
+      - in: "body"
+        name: "word"
+        description: "Word to add"
+        required: true
+        schema:
+          $ref: "#/definitions/Word"
+      responses:
+        201:
+          description: "Word created"
+        400:
+          description: "Invalid input"
+  /words/{wordID}:
+    get:
+      tags:
+      - "default_controller"
+      summary: "Get a word by ID"
+      description: "Retrieve a word by its unique ID"
+      operationId: "controllers.default_controller.words_word_id_get"
+      parameters:
+      - name: "wordID"
+        in: "path"
+        description: "Unique ID of the word"
+        required: true
+        type: "string"
+      responses:
+        200:
+          description: "Details of the word"
+          schema:
+            $ref: "#/definitions/Word"
+        404:
+          description: "Word not found"
+    patch:
+      tags:
+      - "default_controller"
+      summary: "Update a word by ID"
+      description: "Update the details of a word by its unique ID"
+      operationId: "controllers.default_controller.words_word_id_patch"
+      parameters:
+      - name: "wordID"
+        in: "path"
+        description: "Unique ID of the word to update"
+        required: true
+        type: "string"
+      - in: "body"
+        name: "wordUpdate"
+        description: "Word attributes to update"
+        required: true
+        schema:
+          $ref: "#/definitions/wordUpdate"
+      responses:
+        200:
+          description: "Word updated"
+        400:
+          description: "Invalid input"
+        404:
+          description: "Word not found"
+definitions:
+  Word:
+    type: "object"
+    required:
+    - "word"
+    properties:
+      id:
+        type: "string"
+        description: "Unique identifier for the word"
+        readOnly: true
+      word:
+        type: "string"
+        description: "Name of the word"
+        maxLength: 100
+      audio:
+        type: "string"
+        description: "URL to the audio pronunciation of the word"
+      synonyms:
+        type: "array"
+        description: "List of synonyms for the word"
+        items:
+          type: "string"
+  inline_response_200:
+    properties:
+      currentPage:
+        type: "integer"
+      pageSize:
+        type: "integer"
+      totalPages:
+        type: "integer"
+      totalWords:
+        type: "integer"
+      words:
+        type: "array"
+        items:
+          $ref: "#/definitions/Word"
+  wordUpdate:
+    properties:
+      word:
+        type: "string"
+        description: "Updated name of the word"
+      audio:
+        type: "string"
+        description: "Updated URL to the audio pronunciation of the word"
+      synonyms:
+        type: "array"
+        description: "Updated list of synonyms"
+        items:
+          type: "string"

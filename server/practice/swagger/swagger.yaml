@@ -1,0 +1,144 @@
+---
+swagger: "2.0"
+info:
+  description: "API for managing practice sets and their executions"
+  version: "1.0.0"
+  title: "Practice Service"
+basePath: "/practice/v1"
+schemes:
+- "http"
+consumes:
+- "application/json"
+produces:
+- "application/json"
+paths:
+  /executions:
+    get:
+      tags:
+      - "default_controller"
+      summary: "List all practice executions"
+      description: "Retrieve a list of all practice executions"
+      operationId: "controllers.default_controller.executions_get"
+      parameters: []
+      responses:
+        200:
+          description: "An array of practice executions"
+          schema:
+            type: "array"
+            items:
+              $ref: "#/definitions/PracticeExecution"
+    post:
+      tags:
+      - "default_controller"
+      summary: "Record a new practice execution"
+      description: "Record the results of a new practice execution"
+      operationId: "controllers.default_controller.executions_post"
+      parameters:
+      - in: "body"
+        name: "practiceExecution"
+        description: "The practice execution to record"
+        required: true
+        schema:
+          $ref: "#/definitions/PracticeExecution"
+      responses:
+        201:
+          description: "Practice execution recorded"
+        400:
+          description: "Invalid input"
+  /sets:
+    get:
+      tags:
+      - "default_controller"
+      summary: "List all practice sets"
+      description: "Retrieve a list of all practice sets"
+      operationId: "controllers.default_controller.sets_get"
+      parameters: []
+      responses:
+        200:
+          description: "An array of practice sets"
+          schema:
+            type: "array"
+            items:
+              $ref: "#/definitions/PracticeSet"
+    post:
+      tags:
+      - "default_controller"
+      summary: "Create a new practice set"
+      description: "Create a new practice set"
+      operationId: "controllers.default_controller.sets_post"
+      parameters:
+      - in: "body"
+        name: "practiceSet"
+        description: "The practice set to create"
+        required: true
+        schema:
+          $ref: "#/definitions/PracticeSet"
+      responses:
+        201:
+          description: "Practice set created"
+        400:
+          description: "Invalid input"
+definitions:
+  PracticeSet:
+    type: "object"
+    required:
+    - "set_name"
+    - "word_ids"
+    properties:
+      id:
+        type: "string"
+        format: "uuid"
+        description: "Unique identifier for the practice set"
+        readOnly: true
+      set_name:
+        type: "string"
+        description: "Name of the practice set"
+      word_ids:
+        type: "array"
+        description: "List of word IDs included in the practice set"
+        items:
+          type: "string"
+          format: "uuid"
+      created_at:
+        type: "string"
+        format: "date-time"
+        description: "Timestamp when the practice set was created"
+        readOnly: true
+      updated_at:
+        type: "string"
+        format: "date-time"
+        description: "Timestamp of the last update to the set"
+        readOnly: true
+  PracticeExecution:
+    type: "object"
+    required:
+    - "date"
+    - "practice_set_id"
+    - "retries"
+    - "score"
+    properties:
+      id:
+        type: "string"
+        format: "uuid"
+        description: "Unique identifier for the practice execution"
+        readOnly: true
+      practice_set_id:
+        type: "string"
+        format: "uuid"
+        description: "Identifier of the practice set this execution is associated\
+          \ with"
+      date:
+        type: "string"
+        format: "date-time"
+        description: "Timestamp when the practice execution occurred"
+      score:
+        type: "integer"
+        description: "Score achieved in the practice execution"
+      retries:
+        type: "integer"
+        description: "Number of retries in the practice execution"
+      created_at:
+        type: "string"
+        format: "date-time"
+        description: "Timestamp when the execution record was created"
+        readOnly: true
