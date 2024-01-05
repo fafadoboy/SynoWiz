@@ -14,8 +14,8 @@ echo "import click" > "$CLI_DIR/cli.py"  # Example content for CLI tool
 # Create Docker directories and files for each service
 SERVICES=("practice" "lexico")
 for service in "${SERVICES[@]}"; do
-    mkdir -p "$PROJECT_ROOT/server/$service/docker"
-    cat <<EOF > "$PROJECT_ROOT/server/$service/docker/Dockerfile"
+    mkdir -p "$PROJECT_ROOT/service/$service/docker"
+    cat <<EOF > "$PROJECT_ROOT/service/$service/docker/Dockerfile"
 FROM python:3.8-slim
 WORKDIR /usr/src/app
 COPY requirements.txt .
@@ -31,11 +31,11 @@ cat <<EOF > "$DOCKER_DIR/docker-compose.yml"
 version: '3'
 services:
   practice:
-    build: ./server/practice/docker
+    build: ./service/practice/docker
     ports:
       - "80:80"
   lexico:
-    build: ./server/lexico/docker
+    build: ./service/lexico/docker
     ports:
       - "81:80"
 EOF
