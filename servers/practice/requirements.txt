@@ -1,3 +1,0 @@
-connexion[flask]
-connexion[swagger-ui]
-uvicorn

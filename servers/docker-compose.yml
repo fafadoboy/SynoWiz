@@ -1,14 +1,8 @@
 version: '3'
 services:
-  practice:
-    build:
-      context: ./practice
-      dockerfile: docker/Dockerfile
-    ports:
-      - "8080:80"
   lexico:
     build:
       context: ./lexico
       dockerfile: docker/Dockerfile
     ports:
-      - "8081:80"
+      - "8080:80"
